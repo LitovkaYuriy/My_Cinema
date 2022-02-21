@@ -1,0 +1,88 @@
+<!----------------------------------------------------Final----------------------------------------------------------->
+<!----------------------------------------------------Header----------------------------------------------------------->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:insert="../blocks/headfoot.html :: header" class="container"></div>
+
+<!----------------------------------------------------Body----------------------------------------------------------->
+<div class="container mt-3">
+<div class="btn btn-secondary text-center">
+<!-------------------------------------------------Title Image----------------------------------------------------------->
+    <div th:if = "${film.filename !='' && film.filename != null}" class="mb-2">
+        <img th:src="@{'/img/'+${film.filename}}" class="card-img-top" alt="Ошибка при загрузке">
+    </div>
+<!-------------------------------------------------Film Name----------------------------------------------------------->
+        <h1 th:text="${film.filmName}" class="text-center"></h1>
+<!-------------------------------------------Full text for describe film----------------------------------------------------------->
+    <div  th:text="${film.fullText}" class="w-100"/>
+    <br><br>
+<!-------------------------------------------------Tags list----------------------------------------------------------->
+    <div><b>Теги :</b></div>
+    <div th:each="tag : ${film.tags}" class="form-check form-check-inline mb-2">
+        <p th:text=${tag.name}></p>
+    </div>
+<!-------------------------------------------------Show film score----------------------------------------------------------->
+    <h3 th:if="${filmScore == 0}">Фильм еще не имеет оценок</h3>
+    <h3 th:if="${filmScore != 0}" th:text="'Оценка фильма: '+${filmScore}+'/10'"></h3>
+    <br>
+<!-----------------------------------------------Form for edit User film list----------------------------------------------------------->
+    <form method="post" th:action="addUserFilm">
+        <input type="hidden" th:value="${film.id}" name="film">
+        <select th:name="select">
+            <option  th:value="viewed"   th:selected="'viewed'==${selectedn}">Просмотрено</option>
+            <option  th:value="watching" th:selected="'watching'==${selectedn}">Смотрю</option>
+            <option  th:value="inplan"   th:selected="'inplan'==${selectedn}">В планах</option>
+            <option  th:value="dropped"  th:selected="'dropped'==${selectedn}">Брошено</option>
+        </select>
+        <button th:if="${!inCollection}" type="submit" class="btn btn-info">Добавить фильм в коллекцию</button>
+        <button th:if="${inCollection}" type="submit" class="btn btn-info">Изменить статус фильма</button>
+    </form>
+    <br>
+    <!-------------------------------------------------Form for score edit----------------------------------------------------------->
+    <form method="post" th:action="score">
+        <select th:name="select">
+            <option th:each=" i : ${#numbers.sequence(1,10)}" th:value="${i}" th:text="${i}" th:selected="${i==selected}"></option>
+        </select>
+        <input type="hidden" th:value="${film.id}" name="id">
+            <button th:if="${!inCollection}" type="submit" class="btn btn-info">Добавте фильм в коллекицю чтобы оценить</button>
+            <button th:if="${inCollection} and ${!alreadyScored}"  type="submit" class="btn btn-info">Оценить</button>
+            <button th:if="${inCollection} and ${alreadyScored}"  type="submit" class="btn btn-info">Изменить оценку</button>
+    </form>
+    <br>
+<!-------------------------------------------------Same series---------------------------------------------------------->
+    <div th:if="${films}!=null">
+        <div ><b>Из той же серии :</b></div>
+        <div th:each="el : ${films}">
+            <a th:href="'film'+${el.id}" class="text-white" th:text="${el.filmName}"/>
+        </div>
+        <br>
+    </div>
+<!----------------------------------------Delete film button and edit button----------------------------------------------------------->
+    <div th:each="role : ${roles}" th:if="${#lists.contains(user.roles, role)}">
+        <form th:action="deleteCurrentFilm" method="post" >
+        <input type="hidden" name="filmid" th:value="${film.id}">
+        <button type="submit" class="btn btn-danger" >Удалить фильм</button>
+    </form>
+        <br>
+        <a th:href="'/edit'+${film.id}"><button class="btn btn-warning">Редактировать фильм</button></a>
+    </div>
+    <br>
+<!------------------------------------------------Form for add comment----------------------------------------------------------->
+    <form method="post" th:action="addComment">
+        <input type="hidden" th:value="${film.filmName}" name="fn">
+        <input type="hidden" th:value="${film.id}" name="page">
+        <textarea name="comment" placeholder="Ваш коментарий" class="w-50"></textarea>
+        <button type="submit" class="btn btn-info">Отравить</button>
+    </form>
+    <br>
+<!------------------------------------------------Show comments----------------------------------------------------------->
+    <div th:each="comment : ${comments}" class="alert alert-secondary">
+        <a th:href="'/user'+${comment.author}"><div th:text="${comment.author}"></div></a>
+        <div th:text="${comment.text}"></div>
+        <div th:text="${comment.date}"></div>
+    </div>
+</div>
+</div>
+<!----------------------------------------------------Footer----------------------------------------------------------->
+<div th:insert="../blocks/headfoot.html :: footer"></div>
+

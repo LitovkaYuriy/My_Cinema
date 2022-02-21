@@ -1,0 +1,44 @@
+<!------------------------------------------------Final------------------------------------------------------------------>
+<!------------------------------------------------Header------------------------------------------------------------------>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:insert="../blocks/headfoot.html :: header" class="container"></div>
+<!------------------------------------------------Body------------------------------------------------------------------>
+<div class="container center">
+<!------------------------------------------------Form for edit film------------------------------------------------------------------>
+    <h1>Редактирование фильма</h1>
+    <div class="container mb-3">
+        <form th:action="editFilm" method="post" class="alert alert-info mt-2" enctype="multipart/form-data"/>
+        <div class="mt-2"><input type="text" name="filmName" th:value="${film.filmName}" class="w-50"/></div>
+        <div class="mt-2"><input type="text" name="series" th:value="${film.series}" class="w-50"/></div>
+        <div class="mt-2"><textarea type="text" name="prevText" th:text="${film.prevText}" class="w-100"></textarea></div>
+        <div class="mt-2 mb-2"><textarea type="text" name="fullText" th:text="${film.fullText}" class="w-100"></textarea></div>
+        <div class="mb-2"><input type="file" name="fileName"/></div>
+        <div th:each="tag : ${tags}" class="form-check form-check-inline">
+            <div>
+                <input type="checkbox" th:text=${tag.name} th:name="tags" th:value=${tag.id} th:checked="${#lists.contains(film.tags, tag)}">
+            </div>
+        </div>
+        <input type="hidden" name="id" th:value="${film.id}">
+        <div class="mt-2 mb-2" ><button class="btn btn-success" type="submit">Обновить фильм</button></div>
+        </form>
+    </div>
+    <br>
+<!------------------------------------------------Form for add tag----------------------------------------------------------------->
+    <div class="container mt-3">
+        <form th:action="addTag" method="post">
+            <input type="text" th:name="tagName" placeholder="Название тега">
+            <button class="btn btn-success" type="submit">Добавить тег</button>
+        </form>
+    </div>
+    <br>
+<!------------------------------------------------Form for delete tag------------------------------------------------------------------>
+    <div class="container mt-3 mb-2 center">
+        <form th:action="deleteTag" method="post">
+            <input type="text" th:name="tagNameForDel" placeholder="Название тега">
+            <button class="btn btn-danger" type="submit" >Удалить тег</button>
+        </form>
+    </div>
+</div>
+<!------------------------------------------------Footer------------------------------------------------------------------>
+<div th:insert="../blocks/headfoot.html :: footer"></div>

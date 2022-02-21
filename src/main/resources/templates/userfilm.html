@@ -1,0 +1,75 @@
+<!------------------------------------------------Final----------------------------------------------------------------->
+<!------------------------------------------------Header----------------------------------------------------------------->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:insert="../blocks/headfoot.html :: header" class="container"></div>
+<!-------------------------------------------Change visible form---------------------------------------------------------------->
+<div>
+    <form th:action="open" method="post" class="form form-post">
+        <div th:if="${user.open}" class="container text-align-center">
+            Публичный лист просмотров
+            <button  class="btn btn-warning" type="submit">Изменить</button>
+        </div>
+        <div th:if="${!user.open}" class="container text-align-center">
+            Приватный лист просмотров
+            <button  class="btn btn-warning" type="submit">Изменить</button>
+        </div>
+    </form>
+</div>
+<!---------------------------------------Show all user films by lists and deletes form----------------------------------------------------------------->
+<div class="container alert alert-info">
+
+
+    <h1>Просмотрено</h1>
+    <div th:each="userfilm : ${userFilms}">
+        <div th:if="${userfilm.marker} == 'viewed'">
+            <form method="post" th:action="deleteUserFilm">
+                <span  th:if="${userfilm.score != null}" th:text="${userfilm.film.filmName} + '       Оценка : ' + ${userfilm.score}+'/10'"></span>
+                <span  th:if="${userfilm.score == null}" th:text="${userfilm.film.filmName}"></span>
+                <button class="btn btn-danger" type="submit">Удалить фильм фильм с коллекции</button>
+                <input type="hidden" th:value="${userfilm.film.id}" name="film">
+            </form >
+        </div>
+    </div>
+
+
+    <h1>Смотрю</h1>
+    <div th:each="userfilm : ${userFilms}">
+        <div th:if="${userfilm.marker} == 'watching'" >
+            <form method="post" th:action="deleteUserFilm">
+                <span th:if="${userfilm.score != null}" th:text="${userfilm.film.filmName} + '       Оценка : ' + ${userfilm.score}+'/10'"></span>
+                <span th:if="${userfilm.score == null}" th:text="${userfilm.film.filmName}"></span>
+                <button  class="btn btn-danger" type="submit">Удалить фильм фильм с коллекции</button>
+                <input type="hidden" th:value="${userfilm.film.id}" name="film">
+            </form >
+        </div>
+    </div>
+
+
+    <h1>В планах</h1>
+    <div th:each="userfilm : ${userFilms}">
+        <div th:if="${userfilm.marker} == 'inplan'" >
+            <form method="post" th:action="deleteUserFilm">
+                <span th:if="${userfilm.score != null}" th:text="${userfilm.film.filmName} + '       Оценка : ' + ${userfilm.score}+'/10'"></span>
+                <span th:if="${userfilm.score == null}" th:text="${userfilm.film.filmName}"></span>
+                <button  class="btn btn-danger" type="submit">Удалить фильм фильм с коллекции</button>
+                <input type="hidden" th:value="${userfilm.film.id}" name="film">
+            </form >
+        </div>
+    </div>
+
+
+    <h1>Брошено</h1>
+    <div th:each="userfilm : ${userFilms}">
+        <div th:if="${userfilm.marker} == 'dropped'" >
+            <form method="post" th:action="deleteUserFilm">
+                <span th:if="${userfilm.score != null}" th:text="${userfilm.film.filmName} + '       Оценка : ' + ${userfilm.score}+'/10'"></span>
+                <span th:if="${userfilm.score == null}" th:text="${userfilm.film.filmName}"></span>
+                <button  class="btn btn-danger" type="submit">Удалить фильм фильм с коллекции</button>
+                <input type="hidden" th:value="${userfilm.film.id}" name="film">
+            </form >
+        </div>
+    </div>
+</div>
+<!------------------------------------------------Footer----------------------------------------------------------------->
+<div th:insert="../blocks/headfoot.html :: footer"></div>

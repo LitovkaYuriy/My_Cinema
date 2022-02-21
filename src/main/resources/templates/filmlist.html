@@ -1,0 +1,62 @@
+<!------------------------------------------------Final------------------------------------------------------------------>
+<!------------------------------------------------Header------------------------------------------------------------------>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:insert="../blocks/headfoot.html :: header" class="container"></div>
+<style type="text/css">
+a {
+  text-decoration: none;
+}
+</style>
+<!------------------------------------------------Body----------------------------------------------------------------->
+<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start container">
+<!------------------------------------------------Find film -------------------------------------------------------------->
+    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li>
+            <form method="post" th:action="findFilm">
+                <input th:if="${find}==null" th:name="filmName" type="text" placeholder="Название фильма">
+                <input th:if="${find}!=null" th:name="filmName" type="text" th:value="${find}">
+                <button  class="btn btn-primary" type="submit">Найти</button>
+                <br>
+                <div class="w-75 alert alert-info mt-2">
+                    <div  th:each="tag : ${tags}" class="form-check form-check-inline">
+                        <input th:if="${selectedtags}!=null" type="checkbox" th:text="${tag.name}" th:name="tags" th:value=${tag.id} th:checked="${#lists.contains(selectedtags, tag.id)}">
+                        <input th:if="${selectedtags}==null" type="checkbox" th:text="${tag.name}" th:name="tags" th:value=${tag.id}>
+                    </div>
+                </div>
+            </form>
+        </li>
+    </ul>
+<!------------------------------------------------Sort by film score------------------------------------------------------------------>
+    <form method="post" th:action="sortByScore">
+        <div th:each="el : ${films}">
+            <input type="hidden" name="selectedFilms" th:value="${el.id}">
+        </div>
+        <button class="btn btn-warning" type="submit">Сортировать по оценке</button>
+    </form>
+</div>
+<!------------------------------------------------Show all films or message----------------------------------------------------------------->
+<h2 th:if="${message} != null" th:text="${message}" class="text-center"></h2>
+<div class="row row-cols-1 row-cols-md-3 g-4 w-100 mt-2">
+    <div th:each="film : ${films}" class="col">
+        <a th:href="'film'+${film.id}" class="text-dark">
+            <div class="card btn btn-secondary">
+                <div th:if = "${film.filename !='' && film.filename != null}">
+                    <img th:src="@{'/img/'+${film.filename}}" class="card-img-top" alt="Ошибка при загрузке">
+                </div>
+                <div class="card-body alert-info">
+                    <h4 class="card-title text-center" th:text=${film.filmName}></h4>
+                    <p class="card-text" th:text=${film.prevText} ></p>
+                    <p>Жанры :</p>
+                    <div th:each="tag : ${film.tags}" class="form-check form-check-inline">
+                        <p th:text="${tag.name}"></p>
+                    </div>
+                    <p th:if="${film.score == 0}">Фильм еще не имеет оценок</p>
+                    <p th:if="${film.score != 0}" th:text="'Оценка: ' + ${film.score}+'/10'"></p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+<!------------------------------------------------Footer------------------------------------------------------------------>
+<div th:insert="../blocks/headfoot.html :: footer"></div>

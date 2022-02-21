@@ -1,0 +1,39 @@
+<!------------------------------------------------Final----------------------------------------------------------------->
+<!------------------------------------------------Header----------------------------------------------------------------->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:insert="../blocks/headfoot.html :: header" class="container"></div>
+<!------------------------------------------------Body----------------------------------------------------------------->
+<div class="container alert alert-info">
+<!------------------------------------------------Show film by lists----------------------------------------------------------------->
+  <h1>Просмотрено</h1>
+  <div th:each="userfilm : ${userFilms}">
+    <div th:if="${userfilm.marker} == 'viewed'">
+      <span th:if="${userfilm.score != null}" th:text="${userfilm.film.filmName} + '       Оценка : ' + ${userfilm.score}+'/10'"></span>
+      <span th:if="${userfilm.score == null}" th:text="${userfilm.film.filmName}"></span>
+    </div>
+  </div>
+  <h1>Смотрю</h1>
+  <div th:each="userfilm : ${userFilms}">
+    <div th:if="${userfilm.marker} == 'watching'">
+      <span th:if="${userfilm.score != null}" th:text="${userfilm.film.filmName} + '       Оценка : ' + ${userfilm.score}+'/10'"></span>
+      <span th:if="${userfilm.score == null}" th:text="${userfilm.film.filmName}"></span>
+    </div>
+  </div>
+  <h1>В планах</h1>
+  <div th:each="userfilm : ${userFilms}">
+    <div th:if="${userfilm.marker} == 'inplan'">
+      <span th:if="${userfilm.score != null}" th:text="${userfilm.film.filmName} + '       Оценка : ' + ${userfilm.score}+'/10'"></span>
+      <span th:if="${userfilm.score == null}" th:text="${userfilm.film.filmName}"></span>
+    </div>
+  </div>
+  <h1>Брошено</h1>
+  <div th:each="userfilm : ${userFilms}">
+    <div th:if="${userfilm.marker} == 'dropped'">
+      <span th:if="${userfilm.score != null}" th:text="${userfilm.film.filmName} + '       Оценка : ' + ${userfilm.score}+'/10'"></span>
+      <span th:if="${userfilm.score == null}" th:text="${userfilm.film.filmName}"></span>
+    </div>
+  </div>
+</div>
+<!------------------------------------------------Footer----------------------------------------------------------------->
+<div th:insert="../blocks/headfoot.html :: footer"></div>
